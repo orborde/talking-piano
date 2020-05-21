@@ -41,6 +41,7 @@ for blockid, amplitudes in enumerate(np.transpose(spectro)):
     print('synthesized block', blockid)
 samples = sum(blocks, [])
 samples = np.asarray(samples)
+samples = samples / np.max(np.abs(samples))
 samples = np.int16(samples * 32000)
 
 scipy.io.wavfile.write(outp, rate, samples)
