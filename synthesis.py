@@ -31,7 +31,7 @@ for i,f in enumerate(freqs):
 def synthesize_block(width, frequencies, amplitudes):
     samples=[]
     for t in range(width):
-        sample = np.sum(amplitudes * np.sin(t*frequencies))
+        sample = np.sum(amplitudes * np.sin(t*frequencies*2*np.pi))
         samples.append(sample)
     return samples
 

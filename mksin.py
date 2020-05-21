@@ -14,7 +14,7 @@ length=float(length)
 sample_freq = freq / RATE
 
 t = np.asarray(list(range(int(RATE*length))))
-samples = np.sin(t*sample_freq * np.pi)
+samples = np.sin(t*sample_freq * 2*np.pi)
 
 samples = np.asarray(samples)
 samples = np.int16(samples * 32000)
