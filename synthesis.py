@@ -22,7 +22,7 @@ print(rate, rawdata.shape)
 data=rawdata
 print(data.shape)
 
-freqs, wtimes, spectro = scipy.signal.spectrogram(data, nperseg=args.block_size)
+freqs, wtimes, spectro = scipy.signal.spectrogram(data, nperseg=args.block_size, window=('boxcar',), noverlap=0)
 
 #print(freqs, len(freqs))
 print(len(freqs))
