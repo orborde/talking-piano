@@ -1,23 +1,28 @@
 #! /usr/bin/env python3
 
+import argparse
 import matplotlib.pyplot as plt
 import math
+from pathlib import Path
 import numpy as np
 import scipy
 import scipy.signal
 import scipy.io.wavfile
-import sys
 
-_, inp,outp = sys.argv
+parser = argparse.ArgumentParser()
+parser.add_argument("inp", type=Path)
+parser.add_argument("outp", type=Path)
+parser.add_argument("--block-size", type=int, default=128)
+args = parser.parse_args()
 
-rate, rawdata = scipy.io.wavfile.read(inp, mmap=True)
+rate, rawdata = scipy.io.wavfile.read(args.inp, mmap=True)
 print(rate, rawdata.shape)
 
 #data = np.asarray([left for left,right in rawdata])
 data=rawdata
 print(data.shape)
 
-freqs, wtimes, spectro = scipy.signal.spectrogram(data)
+freqs, wtimes, spectro = scipy.signal.spectrogram(data, nperseg=args.block_size)
 
 #print(freqs, len(freqs))
 print(len(freqs))
@@ -37,10 +42,10 @@ def synthesize_block(width, frequencies, amplitudes):
 
 blocks = []
 for blockid, amplitudes in enumerate(np.transpose(spectro)):
-    blocks.append(synthesize_block(128, freqs, amplitudes))
+    blocks.append(synthesize_block(args.block_size, freqs, amplitudes))
     print('synthesized block', blockid)
 samples = sum(blocks, [])
 samples = np.asarray(samples)
 samples = np.int16(samples * 32000)
 
-scipy.io.wavfile.write(outp, rate, samples)
+scipy.io.wavfile.write(args.outp, rate, samples)
