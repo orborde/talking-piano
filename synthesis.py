@@ -33,16 +33,17 @@ print(len(spectro), len(spectro[0]))
 for i,f in enumerate(freqs):
     print(i,f)
 
-def synthesize_block(width, frequencies, amplitudes):
+def synthesize_block(blockid, width, frequencies, amplitudes):
     samples=[]
-    for t in range(width):
+    for idx in range(width):
+        t = blockid*width+idx
         sample = np.sum(amplitudes * np.sin(t*frequencies*2*np.pi))
         samples.append(sample)
     return samples
 
 blocks = []
 for blockid, amplitudes in enumerate(np.transpose(spectro)):
-    blocks.append(synthesize_block(args.block_size, freqs, amplitudes))
+    blocks.append(synthesize_block(blockid, args.block_size, freqs, amplitudes))
     print('synthesized block', blockid)
 samples = sum(blocks, [])
 samples = np.asarray(samples)
